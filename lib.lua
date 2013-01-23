@@ -26,6 +26,7 @@ function Menu.Machine:new ()
   function o:addRoom ( name, room )
     if ( not name or not room ) then return false end
 
+    room:_getCtrlContext().name = name
     rooms[ name ] = room
     return true
   end
@@ -47,9 +48,9 @@ function Menu.Machine:new ()
   function ctrl:follow ( to, item )
     if ( not to or not item or not item:hasRoute(to) ) then return false end
     local route = item:getRoute( to )
-    if ( route.before and not route:before( item, current, self ) ) then return false end
+    if ( route.before and not route:before( item, current:_getCtrlContext(), self ) ) then return false end
     self:move ( route.to or to )
-    if ( route.after ) then route:after( item, current, self ) end
+    if ( route.after ) then route:after( item, current:_getCtrlContext(), self ) end
     return true
   end
   
@@ -64,6 +65,11 @@ function Menu.Room:new ()
     init = function () return true end,
     destroy = function () return true end,
   }
+  
+  -- Worst day in my career. Ever. =) You should never ever use this until you absolutely sure.
+  function o:_getCtrlContext()
+    return ctrl;
+  end
   
   function o:createItem ()
     local item = Menu.Item:new()

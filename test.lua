@@ -60,8 +60,8 @@ loadgame:set( 'text', "Load Game" )
 
 local settings = mainmenu:createItem()
 settings:set( 'text', "Settings" )
-settings:on( 'action', function ( item, room, machine ) return machine:follow( 'settings', item ) end)
-settings:route( 'settings', 'settingsmenu', function ( item, room, machine ) print( 'before' ); return true end, function () print( 'after' ) end )
+settings:on( 'action', function ( item, room, machine ) return machine:follow( 'settings', item, room ) end)
+settings:route( 'settings', 'settingsmenu', function ( route, item, room, machine ) print( 'before', 'In ' .. room.name ); return true end, function (route, item, room, machine ) print( 'after', 'In ' .. room.name ) end )
 
 local quit = mainmenu:createItem()
 quit:set( 'text', "Quit" )
