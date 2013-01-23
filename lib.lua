@@ -17,6 +17,12 @@ function Menu.Machine:new ()
   end
   ctrl.trigger = o.trigger
   
+  function o:createRoom ( name )
+    local room = Menu.Room:new()
+    if ( not self:addRoom ( name, room ) ) then return false end
+    return room
+  end
+  
   function o:addRoom ( name, room )
     if ( not name or not room ) then return false end
 
@@ -46,6 +52,12 @@ function Menu.Room:new ()
   local ctrl = {}
   local items = {}
   local events = {}
+  
+  function o:createItem ()
+    local item = Menu.Item:new()
+    if ( not self:addItem ( item ) ) then return false end
+    return item
+  end
   
   function o:addItem ( item )
     if ( not item ) then return false end

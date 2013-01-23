@@ -39,7 +39,7 @@ local function enter ( room, machine )
   return item:trigger( 'action', room, machine )
 end
 
-local function destroy ( room ) -- room == room (2)
+local function destroy ( room )
   room:trigger( 'clear' )
   room.cursor = nil
   return true
@@ -49,24 +49,20 @@ end
 
 local machine = Menu.Machine:new()
 
-local mainmenu = Menu.Room:new()
+local mainmenu = machine:createRoom( 'mainmenu' )
 
-local newgame = Menu.Item:new()
+local newgame = mainmenu:createItem()
 newgame:set( 'text', "New Game" )
-mainmenu:addItem( newgame )
 
-local loadgame = Menu.Item:new()
+local loadgame = mainmenu:createItem()
 loadgame:set( 'text', "Load Game" )
-mainmenu:addItem( loadgame )
 
-local settings = Menu.Item:new()
+local settings = mainmenu:createItem()
 settings:set( 'text', "Settings" )
 settings:on( 'action', function ( item, room, machine ) machine:move( 'settingsmenu' ) end)
-mainmenu:addItem( settings )
 
-local quit = Menu.Item:new()
+local quit = mainmenu:createItem()
 quit:set( 'text', "Quit" )
-mainmenu:addItem( quit )
 
 mainmenu:on( 'init', init )
 mainmenu:on( 'draw', draw )
@@ -75,7 +71,6 @@ mainmenu:on( 'down', down )
 mainmenu:on( 'up', up )
 mainmenu:on( 'enter', enter )
 mainmenu:on( 'destroy', destroy )
-machine:addRoom( 'mainmenu', mainmenu )
 
 local settingsmenu = Menu.Room:new()
 
@@ -125,10 +120,3 @@ machine:trigger('down')
 machine:trigger('down')
 os.execute("sleep 1")
 machine:trigger('enter')
-
----------------
-
--- Как дать возможность предмету производить переход между комнатами (по сути, управлять машиной):
--- 1) напрямую через ссылку на машину - криво
--- 2) (!) посредством передачи ссылки на родителя (createRoom, createItem)
--- 3) через какое-нить странное приватное свойство, связывающее предметы и машину
