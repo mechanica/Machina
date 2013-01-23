@@ -1,6 +1,7 @@
 local Menu = {
   Machine = {},
   Room = {},
+  Item = {},
 }
 
 function Menu.Machine:new ()
@@ -11,7 +12,7 @@ function Menu.Machine:new ()
   function o:trigger( event )
     if ( not current or not event ) then return false end
 
-    return current.trigger( current, event )
+    return current:trigger( event )
   end
   
   function o:addRoom ( name, room )
@@ -49,6 +50,40 @@ function Menu.Room:new ()
   
   function o:addEvent ( name, func )
     if ( not name or not func ) then return false end
+    events[ name ] = func
+    return true
+  end
+  
+  function o:trigger ( name )
+    if ( not name ) then return false end
+    
+    return events[ name ]( self )
+  end
+  
+  return o
+end
+
+function Menu.Item:new ()
+  local o = {}
+  local props = {}
+  local events = {}
+  
+  function o:getProp ( name )
+    if ( not name ) then return false end
+    
+    return props[ name ]
+  end
+  
+  function o:setProp ( name, value )
+    if ( not name or not value ) then return false end
+    
+    props[ name ] = value
+    return true
+  end
+  
+  function o:addEvent ( name, func )
+    if ( not name or not func ) then return false end
+    
     events[ name ] = func
     return true
   end
