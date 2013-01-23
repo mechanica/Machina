@@ -51,7 +51,7 @@ function Menu.Room:new ()
     return items
   end
   
-  function o:addEvent ( name, func )
+  function o:on ( name, func )
     if ( not name or not func ) then return false end
     events[ name ] = func
     return true
@@ -72,20 +72,20 @@ function Menu.Item:new ()
   local props = {}
   local events = {}
   
-  function o:getProp ( name )
+  function o:get ( name )
     if ( not name ) then return false end
     
     return props[ name ]
   end
   
-  function o:setProp ( name, value )
+  function o:set ( name, value )
     if ( not name or not value ) then return false end
     
     props[ name ] = value
     return true
   end
   
-  function o:addEvent ( name, func )
+  function o:on ( name, func )
     if ( not name or not func ) then return false end
     
     events[ name ] = func

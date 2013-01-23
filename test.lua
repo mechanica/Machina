@@ -11,7 +11,7 @@ end
 local function draw ( room )
   room:trigger( 'clear' )
   for i, v in ipairs(room:getItems()) do
-    print( (room.cursor == i and '> ' or '  ') .. v:getProp('text') )
+    print( (room.cursor == i and '> ' or '  ') .. v:get('text') )
   end
 end
 
@@ -50,29 +50,29 @@ local machine = Menu.Machine:new()
 local mainmenu = Menu.Room:new()
 
 local newgame = Menu.Item:new()
-newgame:setProp( 'text', "New Game" )
+newgame:set( 'text', "New Game" )
 mainmenu:addItem( newgame )
 
 local loadgame = Menu.Item:new()
-loadgame:setProp( 'text', "Load Game" )
+loadgame:set( 'text', "Load Game" )
 mainmenu:addItem( loadgame )
 
 local settings = Menu.Item:new()
-settings:setProp( 'text', "Settings" )
-settings:addEvent( 'action', function ( item, room, machine ) print('SETTINGS!', inspect( room ), inspect( machine )) end)
+settings:set( 'text', "Settings" )
+settings:on( 'action', function ( item, room, machine ) print('SETTINGS!', inspect( room ), inspect( machine )) end)
 mainmenu:addItem( settings )
 
 local quit = Menu.Item:new()
-quit:setProp( 'text', "Quit" )
+quit:set( 'text', "Quit" )
 mainmenu:addItem( quit )
 
-mainmenu:addEvent( 'init', init )
-mainmenu:addEvent( 'draw', draw )
-mainmenu:addEvent( 'clear', clear )
-mainmenu:addEvent( 'down', down )
-mainmenu:addEvent( 'up', up )
-mainmenu:addEvent( 'enter', enter )
-mainmenu:addEvent( 'destroy', destroy )
+mainmenu:on( 'init', init )
+mainmenu:on( 'draw', draw )
+mainmenu:on( 'clear', clear )
+mainmenu:on( 'down', down )
+mainmenu:on( 'up', up )
+mainmenu:on( 'enter', enter )
+mainmenu:on( 'destroy', destroy )
 machine:addRoom( 'mainmenu', mainmenu )
 
 machine:init ( 'mainmenu' )
