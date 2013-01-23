@@ -44,6 +44,15 @@ function Menu.Machine:new ()
     return o:trigger( 'init' )
   end
   
+  function ctrl:follow ( to, item )
+    if ( not to or not item or not item:hasRoute(to) ) then return false end
+    local route = item:getRoute( to )
+    if ( route.before and not route:before( item, current, self ) ) then return false end
+    self:move ( route.to or to )
+    if ( route.after ) then route:after( item, current, self ) end
+    return true
+  end
+  
   return o
 end
 
@@ -93,6 +102,7 @@ function Menu.Item:new ()
   local o = {}
   local props = {}
   local events = {}
+  local routes = {}
   
   function o:get ( name )
     if ( not name ) then return false end
@@ -118,6 +128,27 @@ function Menu.Item:new ()
     if ( not name ) then return false end
     
     return events[ name ]( self, room, machine )
+  end
+  
+  function o:route ( name, to, before, after )
+    if ( not name ) then return false end
+    
+    routes[ name ] = {
+      to = to,
+      before = before,
+      after = after
+    }
+    return true
+  end
+  
+  function o:hasRoute ( to )
+    if ( not to or not routes[ to ] ) then return false end
+    return true
+  end
+  
+  function o:getRoute ( to )
+    if ( not to ) then return false end
+    return routes[ to ]
   end
   
   return o
