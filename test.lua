@@ -6,6 +6,7 @@ local inspect = require('inspect')
 local function init ( room ) 
   room.cursor = 1
   room:trigger( 'draw' )
+  return true
 end
 
 local function draw ( room )
@@ -40,7 +41,8 @@ end
 
 local function destroy ( room ) -- room == room (2)
   room:trigger( 'clear' )
-  room.cursor = nil 
+  room.cursor = nil
+  return true
 end
 
 ---------------
@@ -59,7 +61,7 @@ mainmenu:addItem( loadgame )
 
 local settings = Menu.Item:new()
 settings:set( 'text', "Settings" )
-settings:on( 'action', function ( item, room, machine ) print('SETTINGS!', inspect( room ), inspect( machine )) end)
+settings:on( 'action', function ( item, room, machine ) machine:move( 'settingsmenu' ) end)
 mainmenu:addItem( settings )
 
 local quit = Menu.Item:new()
@@ -75,6 +77,34 @@ mainmenu:on( 'enter', enter )
 mainmenu:on( 'destroy', destroy )
 machine:addRoom( 'mainmenu', mainmenu )
 
+local settingsmenu = Menu.Room:new()
+
+local game = Menu.Item:new()
+game:set( 'text', "Game" )
+settingsmenu:addItem( game )
+
+local video = Menu.Item:new()
+video:set( 'text', "Video" )
+settingsmenu:addItem( video )
+
+local audio = Menu.Item:new()
+audio:set( 'text', "Audio" )
+settingsmenu:addItem( audio )
+
+local back = Menu.Item:new()
+back:set( 'text', "Back" )
+back:on( 'action', function ( item, room, machine ) machine:move( 'mainmenu' ) end)
+settingsmenu:addItem( back )
+
+settingsmenu:on( 'init', init )
+settingsmenu:on( 'draw', draw )
+settingsmenu:on( 'clear', clear )
+settingsmenu:on( 'down', down )
+settingsmenu:on( 'up', up )
+settingsmenu:on( 'enter', enter )
+settingsmenu:on( 'destroy', destroy )
+machine:addRoom( 'settingsmenu', settingsmenu )
+
 machine:init ( 'mainmenu' )
 
 ---------------
@@ -86,6 +116,13 @@ machine:trigger('down')
 machine:trigger('down')
 os.execute("sleep 1")
 machine:trigger('up')
+os.execute("sleep 1")
+machine:trigger('enter')
+os.execute("sleep 1")
+machine:trigger('down')
+machine:trigger('down')
+machine:trigger('down')
+machine:trigger('down')
 os.execute("sleep 1")
 machine:trigger('enter')
 

@@ -25,10 +25,17 @@ function Menu.Machine:new ()
   end
 
   function o:init ( name )
-    if ( not name ) then return false end
+    if ( not name or current ) then return false end
 
     current = rooms[ name ]
     return self:trigger( 'init' )
+  end
+  
+  function ctrl:move ( to )
+    if ( not to or not self:trigger( 'destroy' ) ) then return false end
+    
+    current = rooms[ to ]
+    return o:trigger( 'init' )
   end
   
   return o
