@@ -95,7 +95,7 @@ function Menu.Room:new ()
   end
   
   function o:trigger ( name, machine )
-    if ( not name ) then return false end
+    if ( not name or not events[ name ]) then return false end
     
     return events[ name ]( ctrl, machine ) ~= false
   end
@@ -131,7 +131,7 @@ function Menu.Item:new ()
   end
   
   function o:trigger ( name, room, machine )
-    if ( not name ) then return false end
+    if ( not name or not events[ name ]) then return false end
     
     return events[ name ]( self, room, machine ) ~= false
   end
