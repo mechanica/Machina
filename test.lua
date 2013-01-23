@@ -6,7 +6,6 @@ local inspect = require('inspect')
 local function init ( room ) 
   room.cursor = 1
   room:trigger( 'draw' )
-  return true
 end
 
 local function draw ( room )
@@ -24,14 +23,12 @@ local function down ( room )
   if (room.cursor >= #room:getItems()) then return false end
   room.cursor = room.cursor + 1
   room:trigger( 'draw' )
-  return true
 end
 
 local function up ( room )
   if (room.cursor <= 1) then return false end
   room.cursor = room.cursor - 1
   room:trigger( 'draw' )
-  return true
 end
 
 local function enter ( room, machine )
@@ -42,7 +39,6 @@ end
 local function destroy ( room )
   room:trigger( 'clear' )
   room.cursor = nil
-  return true
 end
 
 ---------------
@@ -61,10 +57,11 @@ loadgame:set( 'text', "Load Game" )
 local settings = mainmenu:createItem()
 settings:set( 'text', "Settings" )
 settings:on( 'action', function ( item, room, machine ) return machine:follow( 'settings', item, room ) end)
-settings:route( 'settings', 'settingsmenu', function ( route, item, room, machine ) print( 'before', 'In ' .. room.name ); return true end, function (route, item, room, machine ) print( 'after', 'In ' .. room.name ) end )
+settings:route( 'settings', 'settingsmenu', function ( route, item, room, machine ) print( 'before', 'In ' .. room.name ) end, function (route, item, room, machine ) print( 'after', 'In ' .. room.name ) end )
 
 local quit = mainmenu:createItem()
 quit:set( 'text', "Quit" )
+quit:on( 'action', function () print('Exiting...'); os.exit() end)
 
 mainmenu:on( 'init', init )
 mainmenu:on( 'draw', draw )
@@ -92,7 +89,7 @@ settingsmenu:addItem( audio )
 
 local back = Menu.Item:new()
 back:set( 'text', "Back" )
-back:on( 'action', function ( item, room, machine ) machine:move( 'mainmenu' ) end)
+back:on( 'action', function ( item, room, machine ) return machine:move( 'mainmenu' ) end)
 settingsmenu:addItem( back )
 
 settingsmenu:on( 'init', init )

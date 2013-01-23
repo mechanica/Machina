@@ -35,20 +35,20 @@ function Menu.Machine:new ()
     if ( not name or current ) then return false end
 
     current = rooms[ name ]
-    return self:trigger( 'init' )
+    return self:trigger( 'init' ) ~= false
   end
   
   function ctrl:move ( to )
-    if ( not to or not self:trigger( 'destroy' ) ) then return false end
+    if ( not to or self:trigger( 'destroy' ) == false ) then return false end
     
     current = rooms[ to ]
-    return o:trigger( 'init' )
+    return o:trigger( 'init' ) ~= false
   end
   
   function ctrl:follow ( to, item )
     if ( not to or not item or not item:hasRoute(to) ) then return false end
     local route = item:getRoute( to )
-    if ( route.before and not route:before( item, current:_getCtrlContext(), self ) ) then return false end
+    if ( route.before and route:before( item, current:_getCtrlContext(), self ) == false ) then return false end
     self:move ( route.to or to )
     if ( route.after ) then route:after( item, current:_getCtrlContext(), self ) end
     return true
@@ -97,7 +97,7 @@ function Menu.Room:new ()
   function o:trigger ( name, machine )
     if ( not name ) then return false end
     
-    return events[ name ]( ctrl, machine )
+    return events[ name ]( ctrl, machine ) ~= false
   end
   ctrl.trigger = o.trigger
   
@@ -133,7 +133,7 @@ function Menu.Item:new ()
   function o:trigger ( name, room, machine )
     if ( not name ) then return false end
     
-    return events[ name ]( self, room, machine )
+    return events[ name ]( self, room, machine ) ~= false
   end
   
   function o:route ( name, to, before, after )
