@@ -6,14 +6,16 @@ local Menu = {
 
 function Menu.Machine:new ()
   local o = {}
+  local ctrl = {}
   local rooms = {}
   local current
 
   function o:trigger( event )
     if ( not current or not event ) then return false end
 
-    return current:trigger( event )
+    return current:trigger( event, ctrl )
   end
+  ctrl.trigger = o.trigger
   
   function o:addRoom ( name, room )
     if ( not name or not room ) then return false end
@@ -34,6 +36,7 @@ end
 
 function Menu.Room:new ()
   local o = {}
+  local ctrl = {}
   local items = {}
   local events = {}
   
@@ -44,7 +47,7 @@ function Menu.Room:new ()
     return true
   end
   
-  function o:getItems ()
+  function ctrl:getItems ()
     return items
   end
   
@@ -54,11 +57,12 @@ function Menu.Room:new ()
     return true
   end
   
-  function o:trigger ( name )
+  function o:trigger ( name, machine )
     if ( not name ) then return false end
     
-    return events[ name ]( self )
+    return events[ name ]( ctrl, machine )
   end
+  ctrl.trigger = o.trigger
   
   return o
 end
@@ -88,10 +92,10 @@ function Menu.Item:new ()
     return true
   end
   
-  function o:trigger ( name )
+  function o:trigger ( name, room, machine )
     if ( not name ) then return false end
     
-    return events[ name ]( self )
+    return events[ name ]( self, room, machine )
   end
   
   return o

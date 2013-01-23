@@ -1,45 +1,46 @@
 local Menu = require('lib')
+local inspect = require('inspect')
 
 ---------------
 
-local function init ( self ) 
-  self.cursor = 1
-  self:trigger( 'draw' )
+local function init ( room ) 
+  room.cursor = 1
+  room:trigger( 'draw' )
 end
 
-local function draw ( self )
-  self:trigger( 'clear' )
-  for i, v in ipairs(self:getItems()) do
-    print( (self.cursor == i and '> ' or '  ') .. v:getProp('text') )
+local function draw ( room )
+  room:trigger( 'clear' )
+  for i, v in ipairs(room:getItems()) do
+    print( (room.cursor == i and '> ' or '  ') .. v:getProp('text') )
   end
 end
 
-local function clear ( self )
+local function clear ( room )
   os.execute('clear')
 end
 
-local function down ( self )
-  if (self.cursor >= #self:getItems()) then return false end
-  self.cursor = self.cursor + 1
-  self:trigger( 'draw' )
+local function down ( room )
+  if (room.cursor >= #room:getItems()) then return false end
+  room.cursor = room.cursor + 1
+  room:trigger( 'draw' )
   return true
 end
 
-local function up ( self )
-  if (self.cursor <= 1) then return false end
-  self.cursor = self.cursor - 1
-  self:trigger( 'draw' )
+local function up ( room )
+  if (room.cursor <= 1) then return false end
+  room.cursor = room.cursor - 1
+  room:trigger( 'draw' )
   return true
 end
 
-local function enter ( self )
-  local item = self:getItems()[self.cursor];
-  return item:trigger( 'action' )
+local function enter ( room, machine )
+  local item = room:getItems()[room.cursor];
+  return item:trigger( 'action', room, machine )
 end
 
-local function destroy ( self ) -- self == room (2)
-  self:trigger( 'clear' )
-  self.cursor = nil 
+local function destroy ( room ) -- room == room (2)
+  room:trigger( 'clear' )
+  room.cursor = nil 
 end
 
 ---------------
@@ -58,7 +59,7 @@ mainmenu:addItem( loadgame )
 
 local settings = Menu.Item:new()
 settings:setProp( 'text', "Settings" )
-settings:addEvent( 'action', function () print('SETTINGS!') end)
+settings:addEvent( 'action', function ( item, room, machine ) print('SETTINGS!', inspect( room ), inspect( machine )) end)
 mainmenu:addItem( settings )
 
 local quit = Menu.Item:new()
