@@ -51,7 +51,10 @@ function Menu.Room:new ()
   local o = {}
   local ctrl = {}
   local items = {}
-  local events = {}
+  local events = {
+    init = function () return true end,
+    destroy = function () return true end,
+  }
   
   function o:createItem ()
     local item = Menu.Item:new()

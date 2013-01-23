@@ -53,6 +53,7 @@ local mainmenu = machine:createRoom( 'mainmenu' )
 
 local newgame = mainmenu:createItem()
 newgame:set( 'text', "New Game" )
+newgame:on( 'action', function ( item, room, machine ) machine:move( 'newgamemenu' ) end)
 
 local loadgame = mainmenu:createItem()
 loadgame:set( 'text', "Load Game" )
@@ -71,6 +72,8 @@ mainmenu:on( 'down', down )
 mainmenu:on( 'up', up )
 mainmenu:on( 'enter', enter )
 mainmenu:on( 'destroy', destroy )
+
+local newgamemenu = machine:createRoom( 'newgamemenu' )
 
 local settingsmenu = Menu.Room:new()
 
@@ -118,5 +121,7 @@ machine:trigger('down')
 machine:trigger('down')
 machine:trigger('down')
 machine:trigger('down')
+os.execute("sleep 1")
+machine:trigger('enter')
 os.execute("sleep 1")
 machine:trigger('enter')
