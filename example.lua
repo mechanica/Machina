@@ -1,5 +1,4 @@
-local Menu = require('lib')
-local inspect = require('inspect')
+local Menu = require('machina')
 
 ---------------
 
