@@ -1,10 +1,10 @@
-local Menu = {
+local Machina = {
   Machine = {},
   Room = {},
   Item = {},
 }
 
-function Menu.Machine:new ()
+function Machina.Machine:new ()
   local o = {}
   local ctrl = {}
   local rooms = {}
@@ -18,7 +18,7 @@ function Menu.Machine:new ()
   ctrl.trigger = o.trigger
   
   function o:createRoom ( name )
-    local room = Menu.Room:new()
+    local room = Machina.Room:new()
     if ( not self:addRoom ( name, room ) ) then return false end
     return room
   end
@@ -57,7 +57,7 @@ function Menu.Machine:new ()
   return o
 end
 
-function Menu.Room:new ()
+function Machina.Room:new ()
   local o = {}
   local ctrl = {}
   local items = {}
@@ -72,7 +72,7 @@ function Menu.Room:new ()
   end
   
   function o:createItem ()
-    local item = Menu.Item:new()
+    local item = Machina.Item:new()
     if ( not self:addItem ( item ) ) then return false end
     return item
   end
@@ -104,7 +104,7 @@ function Menu.Room:new ()
   return o
 end
 
-function Menu.Item:new ()
+function Machina.Item:new ()
   local o = {}
   local props = {}
   local events = {}
@@ -160,4 +160,4 @@ function Menu.Item:new ()
   return o
 end
 
-return Menu
+return Machina
